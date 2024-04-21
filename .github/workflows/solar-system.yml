@@ -129,6 +129,8 @@ jobs:
     dev-deploy:
       needs: docker
       runs-on: ubuntu-latest
+      environment:
+        name: development
       
       steps:
         - name: Checkout Repository
@@ -138,6 +140,12 @@ jobs:
           uses: azure/setup-kubectl@v3
           with:
            version: 'v1.26.0' 
+
+        - name: set kube context
+          uses: azure/k8s-set-context@v3
+          with:
+            method: kubeconfig
+            kubeconfig: '${{ secrets.KUBECONFIG }}'
 
         - name: Fetch Kubernetes Cluster Details
           run: |
